@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#4a9eff">
+  <title>Agregar Cuenta 2FA - Airtm</title>
+  <link rel="stylesheet" href="scan.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="logo">
+          <span class="logo-icon">🔐</span>
+          <div class="logo-text">
+            <span class="brand">Airtm</span>
+            <span class="brand-sub">2FA</span>
+          </div>
+        </div>
+        <div class="header-title">Agregar Cuenta</div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Loading State -->
+      <div id="loadingState" class="state-container">
+        <div class="loader"></div>
+        <p class="state-text">Verificando sesión...</p>
+      </div>
+
+      <!-- Error State -->
+      <div id="errorState" class="state-container hidden">
+        <div class="error-icon">❌</div>
+        <h2 class="error-title">Sesión Inválida</h2>
+        <p class="error-text">El código QR ha expirado o no es válido. Por favor, genera uno nuevo desde la extensión.</p>
+        <button id="retryBtn" class="btn btn-secondary">Reintentar</button>
+      </div>
+
+      <!-- Form State -->
+      <div id="formState" class="state-container hidden">
+        <div class="form-header">
+          <div class="form-icon">✨</div>
+          <h2 class="form-title">Agregar Cuenta 2FA</h2>
+          <p class="form-subtitle">Escanea el código QR o ingresa los datos manualmente</p>
+        </div>
+
+        <!-- QR Scanner Section -->
+        <div class="scanner-section">
+          <button type="button" id="scanQRBtn" class="btn btn-primary btn-large">
+            <span class="btn-icon">📷</span>
+            Escanear Código QR
+          </button>
+          <p class="scanner-hint">Escanea el código QR TOTP de tu servicio</p>
+        </div>
+
+        <!-- Camera View (Hidden by default) -->
+        <div id="cameraView" class="camera-view hidden">
+          <video id="qrVideo" class="qr-video" playsinline></video>
+          <div class="camera-overlay">
+            <div class="scan-region"></div>
+          </div>
+          <button type="button" id="closeCameraBtn" class="btn btn-secondary">
+            <span class="btn-icon">✕</span>
+            Cerrar Cámara
+          </button>
+        </div>
+
+        <!-- Divider -->
+        <div class="divider">
+          <span class="divider-text">o ingresa manualmente</span>
+        </div>
+
+        <!-- Manual Form -->
+        <form id="accountForm" class="account-form">
+          <div class="form-group">
+            <label for="accountName" class="form-label">
+              <span class="label-icon">📝</span>
+              Nombre de la cuenta
+            </label>
+            <input 
+              type="text" 
+              id="accountName" 
+              class="form-input"
+              placeholder="Ej: Google, GitHub, Discord..."
+              required
+              autocomplete="off"
+            >
+            <span class="form-hint">Un nombre descriptivo para identificar tu cuenta</span>
+          </div>
+
+          <div class="form-group">
+            <label for="secretKey" class="form-label">
+              <span class="label-icon">🔑</span>
+              Clave secreta (Base32)
+            </label>
+            <input 
+              type="text" 
+              id="secretKey" 
+              class="form-input"
+              placeholder="JBSWY3DPEHPK3PXP"
+              required
+              autocomplete="off"
+              spellcheck="false"
+            >
+            <span class="form-hint">La clave debe contener solo letras A-Z y números 2-7</span>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="submitBtn">
+            <span class="btn-icon">✓</span>
+            Agregar Cuenta
+          </button>
+        </form>
+      </div>
+
+      <!-- Success State -->
+      <div id="successState" class="state-container hidden">
+        <div class="success-animation">
+          <div class="success-icon">✓</div>
+        </div>
+        <h2 class="success-title">¡Cuenta Agregada!</h2>
+        <p class="success-text">La cuenta se ha agregado correctamente a tu extensión. Puedes cerrar esta ventana.</p>
+        <button id="closeBtn" class="btn btn-primary">Cerrar</button>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p class="footer-text">
+        <span class="footer-icon">🔒</span>
+        Conexión segura
+      </p>
+    </footer>
+  </div>
+
+  <!-- QR Scanner Library -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script type="module" src="scan.js"></script>
+</body>
+</html>
