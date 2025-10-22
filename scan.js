@@ -156,17 +156,21 @@ async function startQRScanner() {
 
     // Inicializar escáner
     if (!html5QrCode) {
-      html5QrCode = new Html5Qrcode("qrVideo");
+      html5QrCode = new Html5Qrcode("qrReader");
     }
 
     isScanning = true;
 
+    // Configuración del escáner
+    const config = {
+      fps: 10,
+      qrbox: { width: 250, height: 250 },
+      aspectRatio: 1.0
+    };
+
     await html5QrCode.start(
       { facingMode: "environment" }, // Cámara trasera
-      {
-        fps: 10,
-        qrbox: { width: 250, height: 250 }
-      },
+      config,
       onScanSuccess,
       onScanError
     );

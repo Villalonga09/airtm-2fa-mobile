@@ -462,89 +462,102 @@ body {
 }
 
 .btn-large {
-  padding: 20px 32px;
-  font-size: 18px;
+  padding: 18px 28px;
+  font-size: 17px;
+  font-weight: 600;
+  min-height: 56px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(74, 158, 255, 0.25);
+  transition: all 0.3s ease;
+}
+
+.btn-large:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 8px rgba(74, 158, 255, 0.3);
 }
 
 .scanner-hint {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-tertiary);
   margin-top: 12px;
+  line-height: 1.5;
 }
 
 .camera-view {
   position: relative;
   width: 100%;
-  max-width: 400px;
-  margin: 0 auto 24px;
-  border-radius: 16px;
+  margin: 0 auto 20px;
+  border-radius: 20px;
   overflow: hidden;
   background: #000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .camera-view.hidden {
   display: none;
 }
 
-.qr-video {
+.qr-reader {
   width: 100%;
-  height: auto;
-  display: block;
+  min-height: 300px;
+  position: relative;
 }
 
-.camera-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
+/* Estilos para el lector QR de html5-qrcode */
+#qrReader {
+  border-radius: 20px;
+  overflow: hidden;
 }
 
-.scan-region {
-  width: 250px;
-  height: 250px;
-  border: 3px solid var(--primary);
-  border-radius: 16px;
-  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
-  animation: pulse 2s ease-in-out infinite;
+#qrReader video {
+  width: 100% !important;
+  height: auto !important;
+  border-radius: 20px;
+  object-fit: cover;
 }
 
-@keyframes pulse {
-  0%, 100% {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5), 0 0 20px var(--primary);
-  }
-  50% {
-    border-color: var(--success);
-    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5), 0 0 30px var(--success);
-  }
+#qrReader__dashboard {
+  display: none !important;
 }
 
-#closeCameraBtn {
+#qrReader__scan_region {
+  border-radius: 20px !important;
+  border: none !important;
+}
+
+#qrReader__camera_selection {
+  display: none !important;
+}
+
+.btn-close-camera {
   margin-top: 16px;
+  width: 100%;
+  max-width: 400px;
+  min-height: 52px;
+  font-size: 16px;
+  border-radius: 14px;
+  font-weight: 600;
 }
 
 .divider {
   display: flex;
   align-items: center;
   text-align: center;
-  margin: 32px 0;
+  margin: 28px 0;
 }
 
 .divider::before,
 .divider::after {
   content: '';
   flex: 1;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 2px solid var(--border);
 }
 
 .divider-text {
-  padding: 0 16px;
-  font-size: 13px;
-  color: var(--text-tertiary);
-  font-weight: 500;
+  padding: 0 20px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
