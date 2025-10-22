@@ -161,11 +161,33 @@ async function startQRScanner() {
 
     isScanning = true;
 
-    // Configuración del escáner
+    // Configuración mejorada del escáner
     const config = {
-      fps: 10,
-      qrbox: { width: 250, height: 250 },
-      aspectRatio: 1.0
+      fps: 20, // Aumentado para mejor detección
+      qrbox: function(viewfinderWidth, viewfinderHeight) {
+        // Caja de escaneo adaptativa
+        let minEdgePercentage = 0.7; // 70% del tamaño de la vista
+        let minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
+        let qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
+        return {
+          width: qrboxSize,
+          height: qrboxSize
+        };
+      },
+      aspectRatio: 1.0,
+      // Formatos soportados
+      formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
+      // Configuración avanzada
+      experimentalFeatures: {
+        useBarCodeDetectorIfSupported: true
+      },
+      // Mostrar indicador de escaneo
+      showTorchButtonIfSupported: true,
+      // Configuración de video
+      videoConstraints: {
+        facingMode: "environment",
+        advanced: [{ zoom: 1.0 }]
+      }
     };
 
     await html5QrCode.start(
@@ -175,7 +197,7 @@ async function startQRScanner() {
       onScanError
     );
 
-    console.log('QR Scanner started');
+    console.log('QR Scanner started with improved config');
   } catch (error) {
     console.error('Error starting QR scanner:', error);
     alert('No se pudo acceder a la cámara. Por favor, verifica los permisos.');
@@ -201,6 +223,10 @@ async function stopQRScanner() {
 // Callback cuando se escanea un QR exitosamente
 function onScanSuccess(decodedText, decodedResult) {
   console.log('QR Code detected:', decodedText);
+  console.log('QR Result:', decodedResult);
+
+  // Detener escáner inmediatamente para evitar múltiples escaneos
+  stopQRScanner();
 
   // Parsear URI TOTP
   const totpData = parseTOTPUri(decodedText);
@@ -210,23 +236,38 @@ function onScanSuccess(decodedText, decodedResult) {
     accountNameInput.value = totpData.label;
     secretKeyInput.value = totpData.secret;
 
-    // Detener escáner
-    stopQRScanner();
-
-    // Mostrar mensaje de éxito
-    alert('✅ Código QR escaneado correctamente');
-
-    // Enfocar en el botón de enviar
-    submitBtn.focus();
+    // Mostrar mensaje de éxito con vibración
+    if (navigator.vibrate) {
+      navigator.vibrate(200); // Vibrar 200ms
+    }
+    
+    // Mostrar alerta de éxito
+    setTimeout(() => {
+      alert('✅ Código QR escaneado correctamente\n\n' + 
+            `Cuenta: ${totpData.label}\n` +
+            `Secret: ${totpData.secret.substring(0, 8)}...`);
+      
+      // Enfocar en el botón de enviar
+      submitBtn.focus();
+      submitBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
   } else {
-    alert('❌ El código QR no es válido. Debe ser un código TOTP (otpauth://)');
+    // Mostrar el contenido del QR para debug
+    console.warn('QR content:', decodedText);
+    alert('❌ El código QR no es válido.\n\n' +
+          'Debe ser un código TOTP que empiece con:\n' +
+          'otpauth://totp/\n\n' +
+          'Contenido detectado:\n' + decodedText.substring(0, 50) + '...');
   }
 }
 
 // Callback para errores de escaneo (se llama continuamente)
 function onScanError(errorMessage) {
   // No hacer nada, es normal que haya "errores" mientras busca el QR
-  // console.log('Scanning...', errorMessage);
+  // Solo logear errores importantes
+  if (errorMessage && !errorMessage.includes('NotFoundException')) {
+    console.debug('Scan error:', errorMessage);
+  }
 }
 
 // Enviar datos de la cuenta a Supabase
