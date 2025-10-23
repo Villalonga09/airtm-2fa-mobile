@@ -326,22 +326,6 @@ scanQRBtn.addEventListener('click', startQRScanner);
 // Botón de cerrar cámara
 closeCameraBtn.addEventListener('click', stopQRScanner);
 
-// Botón de ingreso manual
-const btnManualScan = document.getElementById('btnManualScan');
-if (btnManualScan) {
-  btnManualScan.addEventListener('click', async () => {
-    // Detener escáner
-    await stopQRScanner();
-    
-    // Mostrar alerta personalizada para ingreso manual
-    showCustomAlert(
-      'Ingreso Manual',
-      'Esta función permite ingresar manualmente los datos de la cuenta 2FA.\n\nPor ahora, usa el escáner QR para agregar cuentas automáticamente.',
-      'Entendido'
-    );
-  });
-}
-
 // Botón de reintentar
 retryBtn.addEventListener('click', () => {
   window.location.reload();
