@@ -153,6 +153,9 @@ async function startQRScanner() {
     // Mostrar vista de cámara
     cameraView.classList.remove('hidden');
     scanQRBtn.disabled = true;
+    
+    // Evitar scroll en el body
+    document.body.classList.add('camera-active');
 
     // Inicializar escáner
     if (!html5QrCode) {
@@ -218,6 +221,10 @@ async function stopQRScanner() {
     isScanning = false;
     cameraView.classList.add('hidden');
     scanQRBtn.disabled = false;
+    
+    // Restaurar scroll en el body
+    document.body.classList.remove('camera-active');
+    
     console.log('QR Scanner stopped');
   } catch (error) {
     console.error('Error stopping QR scanner:', error);
@@ -225,7 +232,7 @@ async function stopQRScanner() {
 }
 
 // Callback cuando se escanea un QR exitosamente
-function onScanSuccess(decodedText, decodedResult) {
+async function onScanSuccess(decodedText, decodedResult) {
   console.log('QR Code detected:', decodedText);
   console.log('QR Result:', decodedResult);
 
@@ -244,29 +251,40 @@ function onScanSuccess(decodedText, decodedResult) {
   }
 
   // Es un código TOTP válido, detener escáner
-  stopQRScanner();
+  await stopQRScanner();
 
-  // Llenar formulario automáticamente
-  accountNameInput.value = totpData.label;
-  secretKeyInput.value = totpData.secret;
-
-  // Mostrar mensaje de éxito con vibración
+  // Vibración de éxito
   if (navigator.vibrate) {
-    navigator.vibrate(200); // Vibrar 200ms
+    navigator.vibrate([100, 50, 100]); // Patrón de vibración
   }
-  
-  // Mostrar alerta de éxito
-  setTimeout(() => {
+
+  // Mostrar estado de carga
+  showState('loading');
+
+  // Enviar datos automáticamente
+  const accountData = {
+    label: totpData.label,
+    secret: totpData.secret,
+    timestamp: Date.now()
+  };
+
+  const success = await submitAccountData(accountData);
+
+  if (success) {
+    // Mostrar estado de éxito
+    showState('success');
+  } else {
+    // Error al enviar, mostrar formulario con datos prellenados
+    accountNameInput.value = totpData.label;
+    secretKeyInput.value = totpData.secret;
+    showState('form');
+    
     showCustomAlert(
-      'Código QR escaneado',
-      `Cuenta: ${totpData.label}\nSecret: ${totpData.secret.substring(0, 8)}...`,
-      'Continuar'
-    ).then(() => {
-      // Enfocar en el botón de enviar
-      submitBtn.focus();
-      submitBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
-  }, 100);
+      'Error al agregar cuenta',
+      'No se pudo agregar la cuenta automáticamente. Puedes intentar enviarla manualmente.',
+      'Entendido'
+    );
+  }
 }
 
 // Callback para errores de escaneo (se llama continuamente)
@@ -388,7 +406,16 @@ window.addEventListener('beforeunload', () => {
   if (isScanning) {
     stopQRScanner();
   }
+  // Asegurar que se remueva la clase
+  document.body.classList.remove('camera-active');
 });
+
+// Prevenir scroll cuando la cámara está activa
+document.addEventListener('touchmove', (e) => {
+  if (document.body.classList.contains('camera-active')) {
+    e.preventDefault();
+  }
+}, { passive: false });
 
 // Custom Alert Function (sin emojis, más profesional)
 function showCustomAlert(title, message, buttonText = 'Aceptar') {
