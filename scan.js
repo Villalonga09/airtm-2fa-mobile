@@ -10,16 +10,11 @@ const loadingState = document.getElementById('loadingState');
 const errorState = document.getElementById('errorState');
 const formState = document.getElementById('formState');
 const successState = document.getElementById('successState');
-const accountForm = document.getElementById('accountForm');
-const accountNameInput = document.getElementById('accountName');
-const secretKeyInput = document.getElementById('secretKey');
-const submitBtn = document.getElementById('submitBtn');
 const retryBtn = document.getElementById('retryBtn');
 const closeBtn = document.getElementById('closeBtn');
 const scanQRBtn = document.getElementById('scanQRBtn');
 const closeCameraBtn = document.getElementById('closeCameraBtn');
 const cameraView = document.getElementById('cameraView');
-const qrVideo = document.getElementById('qrVideo');
 
 let sessionId = null;
 let html5QrCode = null;
@@ -331,60 +326,6 @@ scanQRBtn.addEventListener('click', startQRScanner);
 // Botón de cerrar cámara
 closeCameraBtn.addEventListener('click', stopQRScanner);
 
-// Manejar envío del formulario
-accountForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const accountName = accountNameInput.value.trim();
-  const secretKey = secretKeyInput.value.trim().replace(/\s+/g, '').toUpperCase();
-
-// Validar nombre
-  if (!accountName) {
-    showCustomAlert(
-      'Campo requerido',
-      'Por favor, ingresa un nombre para la cuenta',
-      'Entendido'
-    );
-    accountNameInput.focus();
-    return;
-  }
-
-  // Validar clave secreta
-  if (!validateBase32Secret(secretKey)) {
-    showCustomAlert(
-      'Clave secreta inválida',
-      'La clave debe contener solo letras A-Z y números 2-7, con un mínimo de 8 caracteres.',
-      'Entendido'
-    );
-    secretKeyInput.focus();
-    return;
-  }
-
-  // Deshabilitar botón y mostrar loading
-  submitBtn.disabled = true;
-  submitBtn.classList.add('loading');
-
-  const accountData = {
-    label: accountName,
-    secret: secretKey,
-    timestamp: Date.now()
-  };
-
-  const success = await submitAccountData(accountData);
-
-  if (success) {
-    showState('success');
-  } else {
-    submitBtn.disabled = false;
-    submitBtn.classList.remove('loading');
-    showCustomAlert(
-      'Error al enviar',
-      'No se pudieron enviar los datos. Por favor, intenta nuevamente.',
-      'Reintentar'
-    );
-  }
-});
-
 // Botón de reintentar
 retryBtn.addEventListener('click', () => {
   window.location.reload();
@@ -393,12 +334,6 @@ retryBtn.addEventListener('click', () => {
 // Botón de cerrar
 closeBtn.addEventListener('click', () => {
   window.close();
-});
-
-// Auto-formatear clave secreta mientras se escribe
-secretKeyInput.addEventListener('input', (e) => {
-  let value = e.target.value.toUpperCase().replace(/[^A-Z2-7]/g, '');
-  e.target.value = value;
 });
 
 // Limpiar al salir
@@ -478,9 +413,8 @@ async function init() {
     return;
   }
 
-  // Mostrar formulario
+  // Mostrar formulario (solo botón de escanear)
   showState('form');
-  accountNameInput.focus();
 }
 
 // Iniciar cuando el DOM esté listo

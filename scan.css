@@ -529,38 +529,61 @@ body {
   display: none !important;
 }
 
-/* Botón cerrar cámara mejorado para móviles */
+/* Botón cerrar cámara mejorado - Diseño moderno */
 .btn-close-camera {
-  background: rgba(255, 255, 255, 0.15);
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   color: #fff;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  padding: 12px 28px;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 600;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  min-height: 48px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  display: flex;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 52px;
+  box-shadow: 
+    0 4px 20px rgba(239, 68, 68, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.3);
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 10px;
   white-space: nowrap;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.btn-close-camera:active {
-  transform: scale(0.95);
-  background: rgba(255, 255, 255, 0.25);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
 }
 
 .btn-close-camera::before {
-  content: '✕';
-  font-size: 18px;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-close-camera:hover::before {
+  opacity: 1;
+}
+
+.btn-close-camera:active {
+  transform: scale(0.96);
+  box-shadow: 
+    0 2px 12px rgba(239, 68, 68, 0.5),
+    0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.btn-close-camera::after {
+  content: '×';
+  font-size: 24px;
   font-weight: 700;
+  line-height: 1;
+  margin-right: -4px;
 }
 
 .divider {

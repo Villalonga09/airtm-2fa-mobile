@@ -42,74 +42,19 @@
       <!-- Form State -->
       <div id="formState" class="state-container hidden">
         <div class="form-header">
-          <div class="form-icon">✨</div>
-          <h2 class="form-title">Agregar Cuenta 2FA</h2>
-          <p class="form-subtitle">Escanea el código QR o ingresa los datos manualmente</p>
+          <div class="form-icon">📱</div>
+          <h2 class="form-title">Escanear Código QR</h2>
+          <p class="form-subtitle">Apunta tu cámara al código QR TOTP</p>
         </div>
 
         <!-- QR Scanner Section -->
         <div class="scanner-section">
           <button type="button" id="scanQRBtn" class="btn btn-primary btn-large">
             <span class="btn-icon">📷</span>
-            Escanear Código QR
+            Activar Cámara
           </button>
-          <p class="scanner-hint">Escanea el código QR TOTP de tu servicio</p>
+          <p class="scanner-hint">La cuenta se agregará automáticamente al escanear</p>
         </div>
-
-        <!-- Camera View (Hidden by default) -->
-        <div id="cameraView" class="camera-view hidden">
-          <div id="qrReader" class="qr-reader"></div>
-          <button type="button" id="closeCameraBtn" class="btn btn-secondary btn-close-camera">
-            <span class="btn-icon">✕</span>
-            Cerrar Cámara
-          </button>
-        </div>
-
-        <!-- Divider -->
-        <div class="divider">
-          <span class="divider-text">o ingresa manualmente</span>
-        </div>
-
-        <!-- Manual Form -->
-        <form id="accountForm" class="account-form">
-          <div class="form-group">
-            <label for="accountName" class="form-label">
-              <span class="label-icon">📝</span>
-              Nombre de la cuenta
-            </label>
-            <input 
-              type="text" 
-              id="accountName" 
-              class="form-input"
-              placeholder="Ej: Google, GitHub, Discord..."
-              required
-              autocomplete="off"
-            >
-            <span class="form-hint">Un nombre descriptivo para identificar tu cuenta</span>
-          </div>
-
-          <div class="form-group">
-            <label for="secretKey" class="form-label">
-              <span class="label-icon">🔑</span>
-              Clave secreta (Base32)
-            </label>
-            <input 
-              type="text" 
-              id="secretKey" 
-              class="form-input"
-              placeholder="JBSWY3DPEHPK3PXP"
-              required
-              autocomplete="off"
-              spellcheck="false"
-            >
-            <span class="form-hint">La clave debe contener solo letras A-Z y números 2-7</span>
-          </div>
-
-          <button type="submit" class="btn btn-primary" id="submitBtn">
-            <span class="btn-icon">✓</span>
-            Agregar Cuenta
-          </button>
-        </form>
       </div>
 
       <!-- Success State -->
@@ -130,6 +75,19 @@
         Conexión segura
       </p>
     </footer>
+  </div>
+
+  <!-- Camera View (Full Screen) -->
+  <div id="cameraView" class="camera-view hidden">
+    <div class="camera-header">
+      <h3 class="camera-title">Escanear Código QR</h3>
+      <button type="button" id="closeCameraBtn" class="btn-close-camera">
+        Cerrar
+      </button>
+    </div>
+    <div class="camera-container">
+      <div id="qrReader"></div>
+    </div>
   </div>
 
   <!-- QR Scanner Library -->
