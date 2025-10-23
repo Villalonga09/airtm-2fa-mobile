@@ -775,7 +775,7 @@ body {
   height: 100% !important;
 }
 
-/* Overlay de escaneo - Estilo minimalista */
+/* Overlay de escaneo - Sin bordes redondeados */
 .camera-container::after {
   content: '';
   position: absolute;
@@ -785,12 +785,12 @@ body {
   width: 260px;
   height: 260px;
   border: 2px solid rgba(255, 255, 255, 0.8);
-  border-radius: 16px;
+  border-radius: 0;
   box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
   pointer-events: none;
 }
 
-/* Botón inferior - Estilo WhatsApp */
+/* Botón inferior - Azul como "Activar Cámara" */
 .camera-footer {
   background: #f7f7f7;
   padding: 20px;
@@ -800,22 +800,22 @@ body {
 
 .btn-camera-action {
   width: 100%;
-  background: #25d366;
+  background: linear-gradient(135deg, #4a9eff, #3b8de8);
   color: #fff;
   border: none;
   padding: 16px 24px;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
   letter-spacing: 0.3px;
 }
 
 .btn-camera-action:active {
   transform: scale(0.98);
-  background: #20bd5a;
+  box-shadow: 0 2px 8px rgba(74, 158, 255, 0.4);
 }
 
 /* Evitar scroll en body cuando cámara está activa */

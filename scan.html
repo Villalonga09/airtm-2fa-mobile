@@ -77,23 +77,23 @@
     </footer>
   </div>
 
-  <!-- Camera View (Full Screen) - Estilo WhatsApp -->
+  <!-- Camera View (Full Screen) -->
   <div id="cameraView" class="camera-view hidden">
     <div class="camera-header">
       <button type="button" id="closeCameraBtn" class="btn-close-camera">
         Cancelar
       </button>
-      <h3 class="camera-title">Escanea el código QR</h3>
+      <h3 class="camera-title">Escanear Código QR</h3>
     </div>
     <div class="camera-instructions">
-      <p class="camera-instructions-text">Abre web.whatsapp.com, la aplicación de escritorio u otros dispositivos.</p>
+      <p class="camera-instructions-text">Apunta tu cámara al código QR TOTP de tu servicio. La cuenta se agregará automáticamente.</p>
     </div>
     <div class="camera-container">
       <div id="qrReader"></div>
     </div>
     <div class="camera-footer">
-      <button type="button" class="btn-camera-action">
-        Vincular con el número de teléfono
+      <button type="button" id="btnManualScan" class="btn-camera-action">
+        Ingresar Código Manualmente
       </button>
     </div>
   </div>
