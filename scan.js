@@ -200,7 +200,11 @@ async function startQRScanner() {
     console.log('QR Scanner started with improved config');
   } catch (error) {
     console.error('Error starting QR scanner:', error);
-    alert('No se pudo acceder a la cámara. Por favor, verifica los permisos.');
+    showCustomAlert(
+      'Error de cámara',
+      'No se pudo acceder a la cámara. Por favor, verifica los permisos en la configuración de tu navegador.',
+      'Entendido'
+    );
     stopQRScanner();
   }
 }
@@ -225,40 +229,44 @@ function onScanSuccess(decodedText, decodedResult) {
   console.log('QR Code detected:', decodedText);
   console.log('QR Result:', decodedResult);
 
-  // Detener escáner inmediatamente para evitar múltiples escaneos
-  stopQRScanner();
-
-  // Parsear URI TOTP
+  // Parsear URI TOTP primero para validar
   const totpData = parseTOTPUri(decodedText);
 
-  if (totpData) {
-    // Llenar formulario automáticamente
-    accountNameInput.value = totpData.label;
-    secretKeyInput.value = totpData.secret;
+  if (!totpData) {
+    // No es un código TOTP válido, mostrar error pero NO detener escáner
+    console.warn('Invalid TOTP QR, continuing scan...');
+    showCustomAlert(
+      'Código QR no válido',
+      'Debe ser un código TOTP que empiece con: otpauth://totp/\n\nContenido detectado: ' + decodedText.substring(0, 50) + '...',
+      'Entendido'
+    );
+    return; // Continuar escaneando
+  }
 
-    // Mostrar mensaje de éxito con vibración
-    if (navigator.vibrate) {
-      navigator.vibrate(200); // Vibrar 200ms
-    }
-    
-    // Mostrar alerta de éxito
-    setTimeout(() => {
-      alert('✅ Código QR escaneado correctamente\n\n' + 
-            `Cuenta: ${totpData.label}\n` +
-            `Secret: ${totpData.secret.substring(0, 8)}...`);
-      
+  // Es un código TOTP válido, detener escáner
+  stopQRScanner();
+
+  // Llenar formulario automáticamente
+  accountNameInput.value = totpData.label;
+  secretKeyInput.value = totpData.secret;
+
+  // Mostrar mensaje de éxito con vibración
+  if (navigator.vibrate) {
+    navigator.vibrate(200); // Vibrar 200ms
+  }
+  
+  // Mostrar alerta de éxito
+  setTimeout(() => {
+    showCustomAlert(
+      'Código QR escaneado',
+      `Cuenta: ${totpData.label}\nSecret: ${totpData.secret.substring(0, 8)}...`,
+      'Continuar'
+    ).then(() => {
       // Enfocar en el botón de enviar
       submitBtn.focus();
       submitBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 100);
-  } else {
-    // Mostrar el contenido del QR para debug
-    console.warn('QR content:', decodedText);
-    alert('❌ El código QR no es válido.\n\n' +
-          'Debe ser un código TOTP que empiece con:\n' +
-          'otpauth://totp/\n\n' +
-          'Contenido detectado:\n' + decodedText.substring(0, 50) + '...');
-  }
+    });
+  }, 100);
 }
 
 // Callback para errores de escaneo (se llama continuamente)
@@ -312,16 +320,24 @@ accountForm.addEventListener('submit', async (e) => {
   const accountName = accountNameInput.value.trim();
   const secretKey = secretKeyInput.value.trim().replace(/\s+/g, '').toUpperCase();
 
-  // Validar nombre
+// Validar nombre
   if (!accountName) {
-    alert('Por favor, ingresa un nombre para la cuenta');
+    showCustomAlert(
+      'Campo requerido',
+      'Por favor, ingresa un nombre para la cuenta',
+      'Entendido'
+    );
     accountNameInput.focus();
     return;
   }
 
   // Validar clave secreta
   if (!validateBase32Secret(secretKey)) {
-    alert('La clave secreta no es válida. Debe contener solo letras A-Z y números 2-7, con un mínimo de 8 caracteres.');
+    showCustomAlert(
+      'Clave secreta inválida',
+      'La clave debe contener solo letras A-Z y números 2-7, con un mínimo de 8 caracteres.',
+      'Entendido'
+    );
     secretKeyInput.focus();
     return;
   }
@@ -343,7 +359,11 @@ accountForm.addEventListener('submit', async (e) => {
   } else {
     submitBtn.disabled = false;
     submitBtn.classList.remove('loading');
-    alert('Error al enviar los datos. Por favor, intenta nuevamente.');
+    showCustomAlert(
+      'Error al enviar',
+      'No se pudieron enviar los datos. Por favor, intenta nuevamente.',
+      'Reintentar'
+    );
   }
 });
 
@@ -369,6 +389,43 @@ window.addEventListener('beforeunload', () => {
     stopQRScanner();
   }
 });
+
+// Custom Alert Function (sin emojis, más profesional)
+function showCustomAlert(title, message, buttonText = 'Aceptar') {
+  return new Promise((resolve) => {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = 'custom-alert-overlay';
+    alertDiv.innerHTML = `
+      <div class="custom-alert-box">
+        <div class="custom-alert-header">
+          <h3 class="custom-alert-title">${title}</h3>
+        </div>
+        <div class="custom-alert-body">
+          <p class="custom-alert-message">${message}</p>
+        </div>
+        <div class="custom-alert-footer">
+          <button class="custom-alert-btn">${buttonText}</button>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(alertDiv);
+    
+    const btn = alertDiv.querySelector('.custom-alert-btn');
+    btn.addEventListener('click', () => {
+      document.body.removeChild(alertDiv);
+      resolve();
+    });
+    
+    // Cerrar al hacer clic fuera
+    alertDiv.addEventListener('click', (e) => {
+      if (e.target === alertDiv) {
+        document.body.removeChild(alertDiv);
+        resolve();
+      }
+    });
+  });
+}
 
 // Inicializar aplicación
 async function init() {
