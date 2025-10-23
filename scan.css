@@ -790,11 +790,11 @@ body {
   pointer-events: none;
 }
 
-/* Botón inferior - Azul como "Activar Cámara" */
+/* Footer más alto */
 .camera-footer {
   background: #f7f7f7;
-  padding: 20px;
-  padding-bottom: env(safe-area-inset-bottom, 20px);
+  padding: 40px 20px;
+  padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 40px);
   border-top: 1px solid #e0e0e0;
 }
 
