@@ -529,61 +529,37 @@ body {
   display: none !important;
 }
 
-/* Botón cerrar cámara mejorado - Diseño moderno */
+/* Botón cerrar cámara - Estilo WhatsApp */
 .btn-close-camera {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: #fff;
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  color: #007aff;
   border: none;
-  padding: 12px 32px;
-  border-radius: 14px;
-  font-size: 16px;
-  font-weight: 700;
+  padding: 8px 0;
+  font-size: 17px;
+  font-weight: 400;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  min-height: 52px;
-  box-shadow: 
-    0 4px 20px rgba(239, 68, 68, 0.4),
-    0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.2s ease;
+  min-height: auto;
+  box-shadow: none;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
+  justify-content: flex-start;
   white-space: nowrap;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  letter-spacing: 0.5px;
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-close-camera::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.btn-close-camera:hover::before {
-  opacity: 1;
+  text-shadow: none;
+  letter-spacing: -0.2px;
 }
 
 .btn-close-camera:active {
-  transform: scale(0.96);
-  box-shadow: 
-    0 2px 12px rgba(239, 68, 68, 0.5),
-    0 1px 4px rgba(0, 0, 0, 0.4);
+  opacity: 0.5;
+  transform: translateY(-50%);
 }
 
 .btn-close-camera::after {
-  content: '×';
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 1;
-  margin-right: -4px;
+  content: none;
 }
 
 .divider {
@@ -713,40 +689,55 @@ body {
   box-shadow: 0 2px 8px rgba(74, 158, 255, 0.3);
 }
 
-/* Mejoras para vista de cámara completa */
+/* Mejoras para vista de cámara completa - Estilo WhatsApp */
 .camera-view {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: #000;
+  background: #f0f0f0;
   z-index: 9999;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Evitar scroll */
-  touch-action: none; /* Evitar gestos de scroll */
+  overflow: hidden;
+  touch-action: none;
   -webkit-overflow-scrolling: none;
 }
 
 .camera-header {
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.85) 100%);
-  padding: env(safe-area-inset-top, 20px) 20px 16px 20px; /* Soporte para notch */
+  background: #f7f7f7;
+  padding: env(safe-area-inset-top, 12px) 0 12px 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-  flex-shrink: 0; /* No se comprime */
+  position: relative;
+  border-bottom: 1px solid #e0e0e0;
+  flex-shrink: 0;
+  min-height: 56px;
 }
 
 .camera-title {
-  color: #fff;
-  font-size: 18px;
+  color: #000;
+  font-size: 17px;
   font-weight: 600;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-  letter-spacing: 0.3px;
+  letter-spacing: -0.2px;
+  text-align: center;
+}
+
+/* Área de instrucciones */
+.camera-instructions {
+  background: #f7f7f7;
+  padding: 24px 20px;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.camera-instructions-text {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
 }
 
 .camera-container {
@@ -757,7 +748,8 @@ body {
   position: relative;
   overflow: hidden;
   background: #000;
-  touch-action: none; /* Evitar gestos */
+  touch-action: none;
+  margin: 0;
 }
 
 #qrReader {
@@ -783,71 +775,47 @@ body {
   height: 100% !important;
 }
 
-/* Overlay de escaneo */
+/* Overlay de escaneo - Estilo minimalista */
 .camera-container::after {
   content: '';
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 280px;
-  height: 280px;
-  border: 3px solid rgba(74, 158, 255, 0.6);
-  border-radius: 24px;
-  box-shadow: 
-    0 0 0 9999px rgba(0, 0, 0, 0.5),
-    inset 0 0 20px rgba(74, 158, 255, 0.3);
+  width: 260px;
+  height: 260px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 16px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
   pointer-events: none;
-  animation: scanPulse 2s ease-in-out infinite;
 }
 
-@keyframes scanPulse {
-  0%, 100% {
-    border-color: rgba(74, 158, 255, 0.6);
-    box-shadow: 
-      0 0 0 9999px rgba(0, 0, 0, 0.5),
-      inset 0 0 20px rgba(74, 158, 255, 0.3);
-  }
-  50% {
-    border-color: rgba(74, 158, 255, 0.9);
-    box-shadow: 
-      0 0 0 9999px rgba(0, 0, 0, 0.5),
-      inset 0 0 30px rgba(74, 158, 255, 0.5);
-  }
+/* Botón inferior - Estilo WhatsApp */
+.camera-footer {
+  background: #f7f7f7;
+  padding: 20px;
+  padding-bottom: env(safe-area-inset-bottom, 20px);
+  border-top: 1px solid #e0e0e0;
 }
 
-/* Instrucción de escaneo mejorada */
-.camera-container::before {
-  content: 'Apunta al código QR';
-  position: absolute;
-  bottom: env(safe-area-inset-bottom, 100px); /* Soporte para barra inferior */
-  left: 50%;
-  transform: translateX(-50%);
+.btn-camera-action {
+  width: 100%;
+  background: #25d366;
   color: #fff;
+  border: none;
+  padding: 16px 24px;
+  border-radius: 8px;
   font-size: 16px;
   font-weight: 600;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
-  background: rgba(0, 0, 0, 0.75);
-  padding: 14px 28px;
-  border-radius: 28px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  z-index: 10;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
   letter-spacing: 0.3px;
-  animation: instructionPulse 3s ease-in-out infinite;
 }
 
-@keyframes instructionPulse {
-  0%, 100% {
-    opacity: 0.9;
-    transform: translateX(-50%) scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: translateX(-50%) scale(1.02);
-  }
+.btn-camera-action:active {
+  transform: scale(0.98);
+  background: #20bd5a;
 }
 
 /* Evitar scroll en body cuando cámara está activa */
@@ -866,12 +834,16 @@ body.camera-active {
   }
   
   .camera-container::after {
-    width: 260px;
-    height: 260px;
+    width: 240px;
+    height: 240px;
   }
   
-  .camera-header {
-    padding: env(safe-area-inset-top, 16px) 16px 12px 16px;
+  .camera-instructions {
+    padding: 20px 16px;
+  }
+  
+  .camera-instructions-text {
+    font-size: 13px;
   }
   
   .camera-title {
@@ -879,34 +851,20 @@ body.camera-active {
   }
   
   .btn-close-camera {
-    padding: 10px 20px;
-    font-size: 14px;
-    min-height: 44px;
-  }
-  
-  .camera-container::before {
-    font-size: 15px;
-    padding: 12px 24px;
-    bottom: env(safe-area-inset-bottom, 80px);
+    font-size: 16px;
+    left: 12px;
   }
 }
 
 /* Soporte para pantallas muy pequeñas */
 @media (max-width: 360px) {
   .camera-container::after {
-    width: 220px;
-    height: 220px;
+    width: 200px;
+    height: 200px;
   }
   
-  .btn-close-camera {
-    padding: 8px 16px;
-    font-size: 13px;
-    min-height: 40px;
-  }
-  
-  .camera-container::before {
-    font-size: 14px;
-    padding: 10px 20px;
+  .camera-instructions {
+    padding: 16px 12px;
   }
 }
 

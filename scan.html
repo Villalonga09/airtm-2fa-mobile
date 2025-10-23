@@ -77,16 +77,24 @@
     </footer>
   </div>
 
-  <!-- Camera View (Full Screen) -->
+  <!-- Camera View (Full Screen) - Estilo WhatsApp -->
   <div id="cameraView" class="camera-view hidden">
     <div class="camera-header">
-      <h3 class="camera-title">Escanear Código QR</h3>
       <button type="button" id="closeCameraBtn" class="btn-close-camera">
-        Cerrar
+        Cancelar
       </button>
+      <h3 class="camera-title">Escanea el código QR</h3>
+    </div>
+    <div class="camera-instructions">
+      <p class="camera-instructions-text">Abre web.whatsapp.com, la aplicación de escritorio u otros dispositivos.</p>
     </div>
     <div class="camera-container">
       <div id="qrReader"></div>
+    </div>
+    <div class="camera-footer">
+      <button type="button" class="btn-camera-action">
+        Vincular con el número de teléfono
+      </button>
     </div>
   </div>
 
